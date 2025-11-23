@@ -93,7 +93,6 @@ This project uses **Google Maps**, **Supabase**, **Client-side JavaScript**, and
   - `comment_date` array  
 - Comments appear immediately and persist for all future visitors.
 
----
 
 ## Impacts
 - Provides a grassroots solution to tacking pollution
