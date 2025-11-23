@@ -1,0 +1,312 @@
+<html>
+
+<head>
+    <style>
+        #galleryLayout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .reportCard {
+            border: 1px solid #444;
+            width: 230px;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .clickArea img {
+            width: 200px;
+            height: 130px;
+            object-fit: cover;
+            margin-bottom: 5px;
+        }
+
+        .upvoteSection {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        dialog {
+            padding: 20px;
+        }
+        #header{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body onload="displayData()">
+
+    <div id = 'header'><h3>Citizens Page</h3><a href = "index.html">Submit a report here</a></div>
+
+    <div id="galleryLayout"></div>
+
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMSFJgGTdlhMNtClgr67kJXZubGMUkZF8&libraries=marker"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        const client = supabase.createClient(
+            "https://eqhtbqyqnkeretelovtg.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxaHRicXlxbmtlcmV0ZWxvdnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAzNTU1MTgsImV4cCI6MjA3NTkzMTUxOH0.UsOOqNhnwTRrxDcJIbZVhGUxa4RCSzojW-fb2d5-VqY"
+        );
+
+        async function displayData() {
+            const { data: reportData } = await client.from("Reports").select("*");
+
+            for (let i = 0; i < reportData.length; i++) {
+                const report = reportData[i];
+
+                let urls = report.image_url.map(x =>
+                    x.replace(/^\["?|"?\]$/g, "")
+                );
+
+                let reportCard = document.createElement("div");
+                reportCard.className = "reportCard";
+                reportCard.id = `report${i}`;
+
+
+                let clickArea = document.createElement("div");
+                clickArea.className = "clickArea";
+
+                let title = document.createElement("h2");
+                let shortTitle = report.complaint.length > 20 ? report.complaint.substring(0, 17) + "..." : report.complaint;
+
+                title.textContent = shortTitle;
+                clickArea.appendChild(title);
+
+                urls.forEach((url, index) => {
+                    let img = document.createElement("img");
+                    img.src = url;
+                    img.id = `img-${i}-${index}`;
+                    clickArea.appendChild(img);
+                });
+
+                reportCard.appendChild(clickArea);
+
+                // upvotes
+                let upvoteArea = document.createElement("div");
+                upvoteArea.className = "upvoteSection";
+
+                let upvoteBtn = document.createElement("button");
+                upvoteBtn.textContent = `❤️ ${report.upvotes}`;
+
+                let time = document.createElement("p");
+                time.textContent = report.created_at.substring(0, 19);
+
+                upvoteArea.appendChild(upvoteBtn);
+                upvoteArea.appendChild(time);
+
+                reportCard.appendChild(upvoteArea);
+                document.getElementById("galleryLayout").appendChild(reportCard);
+
+
+                clickArea.addEventListener("click", () => {
+                    openDialog(report, urls, report.id);
+                });
+
+                upvoteBtn.addEventListener("click", async (event) => {
+                    event.stopPropagation();
+
+                    await client
+                        .from("Reports")
+                        .update({ upvotes: report.upvotes + 1 })
+                        .eq("id", report.id);
+
+                    report.upvotes++;
+                    upvoteBtn.textContent = `❤️ ${report.upvotes}`;
+                    upvoteBtn.disabled = true;
+                });
+            }
+        }
+
+        function openDialog(report, urls, id) {
+            const dialog = document.createElement("dialog");
+            dialog.style.width = "500px";
+
+            const closeBtn = document.createElement("button");
+            closeBtn.textContent = "✖";
+            closeBtn.style.float = "right";
+            closeBtn.onclick = () => {
+                dialog.close();
+                dialog.remove();
+            };
+            dialog.appendChild(closeBtn);
+
+            let title = document.createElement("h1");
+            title.textContent = report.complaint;
+            dialog.appendChild(title);
+
+            let name = document.createElement("p");
+            name.innerHTML = `<strong>Written by:</strong> ${report.fullName}`;
+            dialog.appendChild(name);
+
+            let email = document.createElement("p");
+            email.innerHTML = `<strong>Email:</strong> ${report.email}`;
+            dialog.appendChild(email);
+
+            urls.forEach(url => {
+                let img = document.createElement("img");
+                img.src = url;
+                img.style.width = "100%";
+                img.style.height = "220px";
+                img.style.objectFit = "cover";
+                img.style.marginTop = "8px";
+                dialog.appendChild(img);
+            });
+
+            const mapDiv = document.createElement("div");
+            mapDiv.style.width = "100%";
+            mapDiv.style.height = "300px";
+            dialog.appendChild(mapDiv);
+
+            const map = new google.maps.Map(mapDiv, {
+                zoom: 1,
+                center: { lat: report.latitude, lng: report.longitude },
+                restriction: {
+                    latLngBounds: {
+                        north: 39.324356,
+                        south: 38.845995,
+                        west: -77.962104,
+                        east: -77.326227,
+                    },
+                    strictBounds: true,
+                },
+                mapId: "8942058782e7ba82da8490bd"
+            });
+
+            new google.maps.marker.AdvancedMarkerElement({
+                position: { lat: report.latitude, lng: report.longitude },
+                map: map
+            });
+
+            let wrapper = document.createElement("div");
+            wrapper.style.marginTop = "20px";
+
+            let label = document.createElement("label");
+            label.textContent = "Add a Comment:";
+            wrapper.appendChild(label);
+
+            let textbox = document.createElement("textarea");
+            textbox.style.width = "100%";
+            textbox.style.height = "80px";
+            textbox.style.marginTop = "5px";
+            wrapper.appendChild(textbox);
+
+            let btn = document.createElement("button");
+            btn.textContent = "Submit Comment";
+            btn.style.marginTop = "8px";
+            btn.addEventListener("click", async () => {
+                const { data: arrayComments } = await client
+                    .from('Reports')
+                    .select('comments')
+                    .eq('id', id)
+                    .single();
+
+                const { data: arrayCommentsDate } = await client
+                    .from('Reports')
+                    .select('comment_date')
+                    .eq('id', id)
+                    .single();
+
+                const now = new Date();
+                const localizedString = now.toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                console.log(arrayComments);
+                const updatedComments = [...(arrayComments.comments || []), textbox.value];
+                const updatedCommentsDate = [...(arrayCommentsDate.comment_date || []), localizedString]
+
+                
+                await client
+                    .from("Reports")
+                    .update({
+                        comments: updatedComments,
+                        comment_date: updatedCommentsDate
+                    })
+                    .eq('id', id);
+                    
+            })
+
+            wrapper.appendChild(btn);
+
+            dialog.appendChild(wrapper);
+
+            //COMMENTS
+
+            const commentsTitle = document.createElement("h3");
+            commentsTitle.textContent = "Comments:";
+            commentsTitle.style.marginTop = "20px";
+            const mainCommentsDiv = document.createElement("div");
+            dialog.appendChild(commentsTitle);
+            dialog.appendChild(mainCommentsDiv);
+
+
+
+    
+            async function loadComments() {
+                const {data: comments} = await client
+                    .from("Reports")
+                    .select("comments")
+                    .eq("id", id)
+                    .single();
+                
+                const {data: commentDate } = await client
+                .from("Reports")
+                .select("comment_date")
+                .eq("id", id)
+                .single();
+
+
+                if (comments.comments.length > 0) {
+                    for (let i = 0; i < comments.comments.length; i++) {
+                        let row = document.createElement("div");
+                        row.style.display = "flex";
+                        row.style.justifyContent = "space-between";
+                        row.style.alignItems = "center";
+                        row.style.borderBottom = "1px solid #ddd";
+                        row.style.padding = "6px 0";
+
+                        let commentText = document.createElement("p");
+                        commentText.textContent = comments.comments[i];
+
+                        let dateText = document.createElement("span");
+                        dateText.textContent = commentDate.comment_date[i];
+                        dateText.style.fontSize = "12px";
+                        dateText.style.color = "#666";
+                        dateText.style.marginLeft = "15px";
+
+                        row.appendChild(commentText);
+                        row.appendChild(dateText);
+
+                        mainCommentsDiv.appendChild(row);
+                    }
+                } else {
+
+                }
+            }
+            loadComments();
+
+
+
+        
+            document.body.appendChild(dialog);
+            dialog.showModal();
+        }
+    </script>
+
+</body>
+
+</html>
