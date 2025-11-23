@@ -95,12 +95,25 @@ This project uses **Google Maps**, **Supabase**, **Client-side JavaScript**, and
 
 ---
 
-## 📌 Future Improvements (Optional)
-- Add volunteer authentication  
+## Impacts
+- Provides a grassroots solution to tacking pollution
+  - The platform empowers residents to easily report pollution issues, helping raise awareness about local environmental problems that might otherwise go unnoticed.
+- Improved response and cleanup efforts
+  - Volunteers and environmental groups get real-time access to reports, photos, and coordinates — making it easier to prioritize and carry out cleanup or investigative actions.
+- Data for Long-Term Environmental Planning
+  - Stored reports provide valuable long-term data for:
+   - Tracking pollution trends  
+   - Identifying repeat offenders or hotspots  
+   - Supporting environmental policy decisions
+
+  
+
+## 📌 Future Improvements
 - Add spam filtering or rate limiting  
 - Integrate AI-based description analysis  
 - Support image deletion or editing  
-- Add sorting (e.g. newest, most upvoted, most commented)  
+- Add sorting (e.g. newest, most upvoted, most commented)
+- Turn into an app, for easier access on mobile phones
 
 
 
