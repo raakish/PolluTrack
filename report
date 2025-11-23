@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loudoun County Pollution Report</title>
+  <style>
+    .reportContainer{
+        display: flex;
+        gap: 30px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    #map {
+      height: 450px;
+      width: 100%;
+      flex: 1 1 55%; /*This attribute relates to flex-grow, flex-shrink, and flex-basis*/
+    }
+    #form{
+      flex: 1 1 40%; /*This attribute relates to flex-grow, flex-shrink, and flex-basis*/
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    #form button{
+      background-color: rgb(0, 162, 255);
+      color: #fff;
+      padding: 10px;
+    }
+    img {
+      display: block;
+      margin-top: 10px;
+    }
+    #header{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+    }
+    #complaintType{
+      height: 100px;
+    }
+
+
+  </style>
+</head>
+<body>
+
+<div id="header"><h3 id="heading">Pollution Report</h3><a href = "volunteerPage.html">Volunteers, see other pollution reports</a></div>
+<div class="reportContainer">
+<div id="mapAndLabelDiv">
+<label for="map">Use the marker to pinpoint where the polluted place is that you are trying to flag</label>
+<div id="map"></div>
+</div>
+
+<div id="form">
+  <label for="name">Full name</label>
+  <input type="text" id="name" required><br><br>
+
+  <label for="email">Email</label>
+  <input type="email" id="email" placeholder="john.doe@example.com" required><br><br>
+
+  <label for="complaintType">Tell us what pollution problem you’ve noticed. 
+    Try to include details like what kind of pollution it is (e.g., litter, smoke, noise), 
+    where it’s located, and when you observed it.</label>
+  <textarea id="complaintType" style="font-family: Arial, Helvetica, sans-serif;"></textarea><br><br>
+  <input type="file" multiple onchange="getImg()"><br><br>
+  <div id="images" style="display:none;">
+  <div id="imagez"></div>
+  </div>
+  <button type="button" id="submit">Submit Report</button>
+</div>
+
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMSFJgGTdlhMNtClgr67kJXZubGMUkZF8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/dompurify@2.2.8/dist/purify.min.js"></script>
+<script>
+  let map;
+  let marker;
+  let markers = [];
+  let allFiles = [];
+  let radius = 0;
+
+  // Initialize Supabase client
+    const client = supabase.createClient(
+      'https://eqhtbqyqnkeretelovtg.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxaHRicXlxbmtlcmV0ZWxvdnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAzNTU1MTgsImV4cCI6MjA3NTkzMTUxOH0.UsOOqNhnwTRrxDcJIbZVhGUxa4RCSzojW-fb2d5-VqY'
+    );
+    
+  // Center of Loudoun County
+  const loudounCenter = { lat: 39.1001, lng: -77.6488 };
+
+  //This initializes the map, with a zoom of 1, LC center, and lat/lng bounds listed in the latLngBounds Object
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 1,
+      center: loudounCenter,
+      restriction: {
+        //only loudoun county
+        latLngBounds: {
+          north: 39.324356,
+          south: 38.845995,
+          west: -77.962104,
+          east: -77.326227,
+        },
+        strictBounds: true,
+      },
+    });
+
+    // Add initial marker at Loudoun County center
+    marker = new google.maps.Marker({
+      position: loudounCenter,
+      map: map,
+      title: "Click anywhere to move the marker",
+    });
+
+    // Move marker on map click
+    map.addListener("click", (e) => {
+      const location = e.latLng;
+      marker.setPosition(location);
+      marker.setTitle(`Marker at (${location.lat().toFixed(4)}, ${location.lng().toFixed(4)})`);
+    });
+
+    markers = [marker];
+  }
+
+  function showImageData() {
+    document.getElementById("images").style.display = "block";
+  }
+
+  function getImg() {
+    const input = document.querySelector('input[type=file]');
+    const files = Array.from(input.files);
+
+    if (!files.length) return;
+
+    files.forEach(file => {
+      allFiles.push(file);
+      const reader = new FileReader();
+      const newImg = document.createElement("img");
+      newImg.style.width = "300px";
+      newImg.style.height = "200px";
+
+      reader.onloadend = () => {
+        newImg.src = reader.result;
+      };
+
+      reader.readAsDataURL(file);
+      document.getElementById("imagez").appendChild(newImg);
+    });
+
+    showImageData();
+    input.value = "";
+  }
+
+  document.getElementById("submit").addEventListener("click", async () => {
+    let fullName = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let complaint=document.getElementById("complaintType").value;
+
+
+    if (!fullName || !email) {
+      alert("Please enter your name and/or email.");
+      return;
+    }
+    else if (allFiles.length === 0) {
+      alert("Please upload at least one image.");
+      return;
+    }
+
+    const centerLongitude = marker.getPosition().lng();
+    const centerLatitude = marker.getPosition().lat();
+
+    console.log(centerLatitude+"=center latitude")
+
+    
+
+    
+    const uploadedImageUrls = await Promise.all(allFiles.map(async (file) => {
+      const fileName = `${Date.now()}_${file.name}`;
+      const filePath = `reports/images/${fileName}`;
+
+      const { error: uploadError } = await client.storage
+        .from('images')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error("Upload error:", uploadError);
+        return null;
+      }
+
+      const { data: publicUrlData } = client.storage
+        .from('images')
+        .getPublicUrl(filePath);
+
+      return publicUrlData.publicUrl;
+    }));
+    
+    const imageUrls = uploadedImageUrls.filter(url => url !== null);
+    
+    console.log(imageUrls);
+    
+
+    //const sampleTxt="URL";
+    const pollutionReport = {
+      fullName: fullName,
+      email: email,
+      longitude: centerLongitude,
+      latitude: centerLatitude,
+      complaint: complaint,
+      image_url: imageUrls
+    }
+
+    const { error } = await client
+      .from('Reports')
+      .insert([pollutionReport]);
+
+    if (error) {
+      console.error("Insert error:", error);
+      alert("Failed to send report.");
+    } else {
+      console.log("Report sent!", pollutionReport);
+      alert("Report submitted successfully!");
+    }
+  });
+
+  // Load the map after DOM loads
+  window.onload = initMap;
+</script>
+
+
+</body>
+</html>
