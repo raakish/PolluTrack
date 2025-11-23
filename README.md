@@ -94,7 +94,7 @@ This project uses **Google Maps**, **Supabase**, **Client-side JavaScript**, and
 - Comments appear immediately and persist for all future visitors.
 
 
-## Impacts
+## 💥 Impacts
 - Provides a grassroots solution to tacking pollution
   - The platform empowers residents to easily report pollution issues, helping raise awareness about local environmental problems that might otherwise go unnoticed.
 - Improved response and cleanup efforts
