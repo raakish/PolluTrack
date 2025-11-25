@@ -76,7 +76,7 @@
 
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMSFJgGTdlhMNtClgr67kJXZubGMUkZF8"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=myKey"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module" src="https://cdn.jsdelivr.net/npm/dompurify@2.2.8/dist/purify.min.js"></script>
 <script>
@@ -88,8 +88,8 @@
 
   // Initialize Supabase client
     const client = supabase.createClient(
-      'https://eqhtbqyqnkeretelovtg.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxaHRicXlxbmtlcmV0ZWxvdnRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAzNTU1MTgsImV4cCI6MjA3NTkzMTUxOH0.UsOOqNhnwTRrxDcJIbZVhGUxa4RCSzojW-fb2d5-VqY'
+      'myURL',
+      'myKey'
     );
     
   // Center of Loudoun County
