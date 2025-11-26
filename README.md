@@ -1,97 +1,44 @@
-# Loudoun County Pollution Reporting System
+# PolluTracker
 
-A web-based application that allows citizens to report environmental pollution issues in Loudoun County and enables community volunteers to view, upvote, and comment on submitted reports.  
-This project uses **Google Maps**, **Supabase**, **Client-side JavaScript**, and **HTML/CSS**.
+Hello, my name is Ackshat Tiwari, and I am very excited to share the rpoject which I have made, PolluTrack. This app helps Loudoun County by allowing users to identify, assess, respind to, and upvote pollution incidents that are taking place within the county. I will talk about the **Features**, **Tech Stack**, **Impacts**, and **What's next**. Keep reading for more.
 
 ---
 
 ## 🚀 Features
 
 ### **Citizen Report Page (`index.html`)**
-- Interactive **Google Maps marker** to pinpoint pollution locations.
-- Input fields for:
-  - Full name  
-  - Email  
-  - Pollution description  
-  - Image uploads (supports multiple)
-- Live image preview before submission.
-- Uploads photos to a storage bucket.
-- Saves a pollution report to **Reports** including:
-  - Latitude / longitude  
-  - Name + email  
-  - Complaint text  
-  - Array of image URLs  
-  - Timestamp  
-  - Upvotes (default: 0)  
-  - Comments & comment timestamps
+Initially, there is a citizens page where residents of Loudoun County can identify pollution and submit online reports explaining pollution. Here is what my program can allocate:
+- Location, based on an interactive map
+- Name and email
+- A text box where you can describe the pollution
+- Image uploading
+Users are envouraged to providing a concise but understandable description of the pollution so that other people can understand it.
 
 ---
 
 ### **Volunteer Reports Page (`volunteerPage.html`)**
-- Displays all submitted reports in a responsive card gallery.
-- Each card includes:
-  - Shortened complaint title  
-  - First image preview  
-  - Timestamp  
-  - Upvote button
-- Clicking a card opens a **dialog with full details**, including:
-  - Full report text  
-  - Reporter’s name & email  
-  - All uploaded images  
-  - A map showing the exact coordinates  
-  - Comment section with timestamps  
-- Comments are saved in Supabase as arrays:
-
----
+- Displays all the reports in a gallery layout
+- Each report card shows the following:
+ - Short Title
+ - Uploaded Images
+ - Date
+ - Upvote count and upvote button
+- When you click it, it shows the full complaint, a map hihglighting the location, and a comment box where you can post and view comments for the report.
 
 
 ---
+
 
 ## 🧰 Technologies Used
 
 - **HTML5 + CSS3**
-- **Vanilla JavaScript**
-- **Google Maps JavaScript API**
+- **JavaScript**
+- **Google Maps API**
 - **Supabase**
-  - Database (PostgreSQL)
-  - Storage (image uploads)
-  - REST API for CRUD operations
-
-
-
-
-## 🧪 How It Works (Brief Overview)
-
-
-### **Submitting a Report**
-1. User fills out the form and selects a location on the map.
-2. Images are uploaded to **Supabase Storage**.
-3. The report is saved in the **Reports** table with all associated image URLs.
-4. User receives a confirmation that the report was successfully submitted.
+  - Database table
+  - Storage bucket
 
 ---
-
-### **Viewing Reports**
-- Reports are displayed in a **gallery-style layout**.
-- Each card shows:
-  - A shortened version of the complaint  
-  - A preview image  
-  - Upvote count  
-  - Timestamp  
-- Clicking a report opens a **modal dialog** containing:
-  - Full complaint text  
-  - Reporter’s name and email  
-  - All uploaded images  
-  - A Google Maps view centered on the pollution location  
-  - A comment submission area  
-
----
-
-### **Commenting**
-- New comments are appended to the existing:
-  - `comments` array  
-  - `comment_date` array  
-- Comments appear immediately and persist for all future visitors.
 
 
 ## 💥 Impacts
@@ -99,20 +46,26 @@ This project uses **Google Maps**, **Supabase**, **Client-side JavaScript**, and
   - The platform empowers residents to easily report pollution issues, helping raise awareness about local environmental problems that might otherwise go unnoticed.
 - Improved response and cleanup efforts
   - Volunteers and environmental groups get real-time access to reports, photos, and coordinates — making it easier to prioritize and carry out cleanup or investigative actions.
-- Data for Long-Term Environmental Planning
+- Provides data for long term environmental planning
   - Stored reports provide valuable long-term data for:
    - Tracking pollution trends  
    - Identifying repeat offenders or hotspots  
    - Supporting environmental policy decisions
 
-  
+
+---
+
 
 ## 📌 Future Improvements
-- Add spam filtering or rate limiting  
-- Integrate AI-based description analysis  
-- Support image deletion or editing  
-- Add sorting (e.g. newest, most upvoted, most commented)
+- Incorportate spam-filtering features to block automated or false reports.
+- Integrate AI-based description analysis
+- Add sorting (e.g. newest, most upvoted, most commented), and advanced search filters
 - Turn into an app, for easier access on mobile phones
+
+
+
+> **Note:** The API key in the examples is a placeholder. You must replace it with your own key. Copying the placeholder will not work.
+ 
 
 
 
