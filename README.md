@@ -1,6 +1,6 @@
 # PolluTracker
 
-Hello, my name is Ackshat Tiwari, and I am very excited to share the rpoject which I have made, PolluTrack. This app helps Loudoun County by allowing users to identify, assess, respind to, and upvote pollution incidents that are taking place within the county. I will talk about the **Features**, **Tech Stack**, **Impacts**, and **What's next**. Keep reading for more.
+Hello, my name is Ackshat Tiwari, and I am very excited to share the project which I have made, PolluTrack. This app helps Loudoun County by allowing users to identify, assess, respind to, and upvote pollution incidents that are taking place within the county. I will talk about the **Features**, **Tech Stack**, **Impacts**, and **What's next**. Keep reading for more.
 
 ---
 
@@ -64,8 +64,19 @@ Users are envouraged to providing a concise but understandable description of th
 
 
 
-> **Note:** The API key in the examples is a placeholder. You must replace it with your own key. Copying the placeholder will not work.
- 
+## How to set up
+This might feel lengthy, but the API keys provided in the code are placeholders, and would not work. Your database must contain the following columns. The column values are not required, but are some sample data that would be collected in the database.
+| id  | created_at         | fullName      | email             | longitude | latitude | complaint         | image_url         | upvotes | comments        | comment_date       |
+|-----|------------------|---------------|-----------------|-----------|---------|-----------------|-----------------|--------|----------------|------------------|
+| 1   | 2025-11-15 16:00:15.845797+00 | John Doe      | john@example.com | -122.42   | 37.77   | Litter everywhere | http://img.com/1 | 5      | [c1], [c2], [c3]   | [d1], [d2], [d3] |
+| 2   | 2025-11-23 23:17:50.461556+00 | Jane Smith    | jane@example.com | -122.43   | 37.78   | Chemical runoff | http://img.com/2 | 3      | [c4], [c5]    | [d4], [d5] |
 
+A storage bucket must be designed as well for images to be stored in. The bucket will follow a path like this, where images is the name of the bucket.
+
+images/
+└── reports/
+    └── images/
+        ├── sample_image_1.jpg
+        └── sample_image_2.png
 
 
