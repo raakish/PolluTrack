@@ -62,7 +62,7 @@ Users are envouraged to providing a concise but understandable description of th
 - Add sorting (e.g. newest, most upvoted, most commented), and advanced search filters
 - Turn into an app, for easier access on mobile phones
 
-
+---
 
 ## How to set up
 This might feel lengthy, but the API keys provided in the code are placeholders, and would not work. Your database must contain the following columns. The column values are not required, but are some sample data that would be collected in the database.
