@@ -1,6 +1,6 @@
 # PolluTracker
 
-Hello, my name is Ackshat Tiwari, and I am very excited to share the project which I have made, PolluTrack. This app helps Loudoun County by allowing users to identify, assess, respind to, and upvote pollution incidents that are taking place within the county. I will talk about the **Features**, **Tech Stack**, **Impacts**, and **What's next**. Keep reading for more.
+Hello, my name is Ackshat Tiwari, and I am very excited to share the project which I have made, PolluTrack. This app helps Loudoun County by allowing users to identify, assess, respind to, and upvote pollution incidents that are taking place within the county. I will talk about the **Features**, **Tech Stack**, **Impacts**, **What's next**, and **How to set up**. Keep reading for more.
 
 ---
 
@@ -73,10 +73,9 @@ This might feel lengthy, but the API keys provided in the code are placeholders,
 
 A storage bucket must be designed as well for images to be stored in. The bucket will follow a path like this, where images is the name of the bucket.
 
-images/
+```images/
 └── reports/
     └── images/
         ├── sample_image_1.jpg
         └── sample_image_2.png
-
-
+```
