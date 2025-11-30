@@ -65,7 +65,10 @@ Users are envouraged to providing a concise but understandable description of th
 ---
 
 ## How to set up
-This might feel lengthy, but the API keys provided in the code are placeholders, and would not work. Your database must contain the following columns. The column values are not required, but are some sample data that would be collected in the database.
+This setup might feel lengthy because the program itself would not function. This is because the API keys provided in the code are placeholders, and would not let the program work. You need to set up a database table on Supabase, your own URL and key, and a storage bucket with the same path below. 
+
+Your database must contain the following columns. The rows are not required, but they are some sample data that would be collected.
+
 | id  | created_at         | fullName      | email             | longitude | latitude | complaint         | image_url         | upvotes | comments        | comment_date       |
 |-----|------------------|---------------|-----------------|-----------|---------|-----------------|-----------------|--------|----------------|------------------|
 | 1   | 2025-11-15 16:00:15.845797+00 | John Doe      | john@example.com | -122.42   | 37.77   | Litter everywhere | http://img.com/1 | 5      | [c1], [c2], [c3]   | [d1], [d2], [d3] |
