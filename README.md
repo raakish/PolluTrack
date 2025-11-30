@@ -65,7 +65,7 @@ Users are envouraged to providing a concise but understandable description of th
 ---
 
 ## How to set up
-This setup might feel lengthy because the program itself would not function. This is because the API keys provided in the code are placeholders, and would not let the program work. You need to set up a database table on Supabase, your own URL and key, and a storage bucket with the same path below. 
+The program would not function, because the API keys provided in the code are placeholders. You need to set up your own database table on Supabase, your own URL and key, and a storage bucket with the same path below. 
 
 Your database must contain the following columns. The rows are not required, but they are some sample data that would be collected.
 
